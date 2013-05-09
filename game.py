@@ -367,7 +367,7 @@ class Game:
         for i in range(14,1,-1):
             if (self.__cards[i] == 2):
                 if (pair == -1):
-                    pair = 1
+                    pair = i
             elif (self.__cards[i] > 0):
                 if (kickerOne == -1):
                     kickerOne = i
@@ -382,6 +382,7 @@ class Game:
             kickOne = self.__calculateKickerDistance(dist)
             kickTwo = self.__calculateKickerDistance(kickOne)
             kickThr = self.__calculateKickerDistance(kickTwo)
+            self.__second = dist*(i-2)+kickOne*(kickerOne-2)+kickTwo*(kickerTwo-2)+kickThr*(kickerThree-2)
             return True
         else:
             return False

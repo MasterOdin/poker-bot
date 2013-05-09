@@ -29,10 +29,10 @@ probRiver = []
 encounteredRiver = []
 
 # file inputs
-p = open("results/pocket.txt","w")
-f = open("results/flop.txt","w")
-t = open("results/turn.txt","w")
-r = open("results/river.txt","w")
+p = open("results/pocket.txt","r+")
+f = open("results/flop.txt","r+")
+t = open("results/turn.txt","r+")
+r = open("results/river.txt","r+")
 
 winner = 0
 
