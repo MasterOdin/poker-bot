@@ -36,3 +36,9 @@ nosetests.xml
 
 # Sublime
 *.sublime-*
+
+# Report
+*.docx
+
+# Results
+results/
