@@ -23,38 +23,79 @@ class Game:
 
     # public functions
     def startRound(self):
-        self.__deck = self.__shuffle(self.deckStart);
+        self.__deck = self.__shuffle(self.deckStart[:]);
         self.__handOne = []
         self.__handTwo = []
-        self.__handOne.append(self.__deck.pop(0))
-        self.__handTwo.append(self.__deck.pop(0))
-        self.__handOne.append(self.__deck.pop(0))
-        self.__handTwo.append(self.__deck.pop(0))        
+        self.__addToHand(self.__handOne,self.__deck.pop(0))
+        self.__addToHand(self.__handTwo,self.__deck.pop(0))
+        self.__addToHand(self.__handOne,self.__deck.pop(0))
+        self.__addToHand(self.__handTwo,self.__deck.pop(0))
+        self.__iHandOne = self.__handOne[:]
+        self.__iHandTwo = self.__handTwo[:]        
         self.__community = []
 
     def dealFlop(self):
         self.__deck.pop(0)
-        self.__community.append(self.__deck.pop(0))
-        self.__community.append(self.__deck.pop(0))
-        self.__community.append(self.__deck.pop(0))
+        card = self.__deck.pop(0)
+        self.__addToHand(self.__community,card)
+        self.__addToHand(self.__handOne,card)
+        self.__addToHand(self.__handTwo,card)
+        card = self.__deck.pop(0)
+        self.__addToHand(self.__community,card)
+        self.__addToHand(self.__handOne,card)
+        self.__addToHand(self.__handTwo,card)
+        card = self.__deck.pop(0)
+        self.__addToHand(self.__community,card)
+        self.__addToHand(self.__handOne,card)
+        self.__addToHand(self.__handTwo,card)                         
 
     def dealTurn(self):
         self.__deck.pop(0)
-        self.__community.append(self.__deck.pop(0))
+        card = self.__deck.pop(0)
+        self.__addToHand(self.__community,card)
+        self.__addToHand(self.__handOne,card)
+        self.__addToHand(self.__handTwo,card) 
 
     def dealRiver(self):
         self.__deck.pop(0)
-        self.__community.append(self.__deck.pop(0))
+        card = self.__deck.pop(0)
+        self.__addToHand(self.__community,card)
+        self.__addToHand(self.__handOne,card)
+        self.__addToHand(self.__handTwo,card) 
 
     def getHandStrength(self,player):
         if (player == 0):
-            return self.__calculateHand(self.__community)
+            return round(self.__calculateHand(self.__community),15)
         if (player == 1):
-            return self.__calculateHand(self.__handOne+self.__community)
+            return round(self.__calculateHand(self.__handOne),15)
         elif (player == 2):
-            return self.__calculateHand(self.__handTwo+self.__community)
+            return round(self.__calculateHand(self.__handTwo),15)
         else:
             return 0
+
+    def getWinner(self):
+        one = self.__calculateHand(self.__handOne)
+        two = self.__calculateHand(self.__handTwo)
+        if (one > two):
+            return 1
+        elif (one == two):
+            return 0
+        else:
+            return -1
+
+    def displayPlayer(self,player):
+        if (player == 1):
+            use = self.__iHandOne
+        elif (player == 2):
+            use = self.__iHandTwo
+        elif (player == 0):
+            use = self.__community
+        else:
+            return False
+        print("Player " + str(player) + " has:")
+        for i in range(0,len(use)):
+            print(use[i].getCard())
+        return True
 
     # internal functions
     def __createDeck(self):
@@ -77,13 +118,20 @@ class Game:
         for i in range(0,3):
             for j in range(0,52):
                 rand = int(random.uniform(0,52))
-                temp = deck[i];
-                deck[i] = deck[rand];
+                temp = deck[j];
+                deck[j] = deck[rand];
                 deck[rand] = temp;
         return deck
 
-    def __burn(self, deck):
-        return deck.pop(0)
+    def __addToHand(self,hand,card):
+        if (len(hand) == 0):
+            hand.append(card)
+        else:
+            for i in range(0,len(hand)):
+                if (hand[i].getNumber() > card.getNumber()):
+                    hand.insert(i,card)
+                    return
+            hand.append(card)
 
     '''
     ways to win:
@@ -111,26 +159,33 @@ class Game:
         self.__cards = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
         #               0 1 2 3 4 5 6 7 8 9 0 j q k a
         self.__calculateDistribution(hand)
-        if (self.__checkRoyalFlush(hand)):
-            first = 9
-        elif (self.__checkStraightFlush(hand)):
-            first = 8
-        elif (self.__checkFourKind(hand)):
-            first = 7
-        elif (self.__checkFullHouse(hand)):
-            first = 6
-        elif (self.__checkFlush(hand)):
-            first = 5
-        elif (self.__checkStraight(hand)):
-            first = 4
-        elif (self.__checkThreeKind(hand)):
-            first = 3
-        elif (self.__checkTwoPair(hand)):
-            first = 2
-        elif (self.__checkPair(hand)):
-            first = 1
-        elif (self.__checkHighCard(hand)):
-            first = 0
+        if (len(self.__community) > 0):
+            if (self.__checkRoyalFlush(hand)):
+                first = 9
+            elif (self.__checkStraightFlush(hand)):
+                first = 8
+            elif (self.__checkFourKind(hand)):
+                first = 7
+            elif (self.__checkFullHouse(hand)):
+                first = 6
+            elif (self.__checkFlush(hand)):
+                first = 5
+            elif (self.__checkStraight(hand)):
+                first = 4
+            elif (self.__checkThreeKind(hand)):
+                first = 3
+            elif (self.__checkTwoPair(hand)):
+                first = 2
+            elif (self.__checkPair(hand)):
+                first = 1
+            elif (self.__checkHighCard(hand)):
+                first = 0
+        else:
+            if (self.__checkPair(hand)):
+                first = 1
+            elif (self.__checkHighCard(hand)):
+                first = 0
+
         return first+self.__second;
 
     def __calculateDistribution(self,hand):
