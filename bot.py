@@ -66,7 +66,6 @@ returns:
     2 - bet opponent
 '''
 def chooseAction(strength,part):
-    print(strength)
     action = 0
     if part == 0:
         if strength not in valuesPocket:
