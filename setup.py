@@ -1,11 +1,14 @@
 '''
 Created 5/6/2013
 
-poker-bot:
+setup.py:
     Create a working poker bot that initially only knows the rules of texas
     hold'em. It knows nothing of a strong hand or anything, but will learn
-    through use of Monte Carlo encountered updates for reinforcement learning
-    by playing against itself.
+    through use of reinforcement learning on different hand strengths made
+    at random.
+
+    Note: Hitting esc during execution will allow the bot to leave the loop
+    and save the results there. Useful for allowing bot to run indefinitely
 '''
 
 import msvcrt
