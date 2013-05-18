@@ -1,4 +1,3 @@
-
 '''
     Read in saved probabilities for different card strengths
     and save it to lists for access later
@@ -109,6 +108,4 @@ def chooseAction(strength,part):
             action =  1
         elif probRiver[i] >= .6:
             action = 2
-
-    print(action)
     return action
