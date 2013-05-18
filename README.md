@@ -13,7 +13,7 @@ Currently, only a very simple betting policy is in place:
     if above .6 probability, bet  
 A more remarkable policy would be a future consideration
 
-Files:
+Files:  
 ./bot.py (logic beyond bot making an action)   
 ./card.py (basic card object for inserting into a deck)   
 ./game.py (main game logic. allows for playing through the game)   
